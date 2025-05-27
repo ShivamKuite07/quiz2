@@ -77,6 +77,45 @@ def attendance_chart_page(request):
 
 
 
+# core/views.py
+from django.db.models import Count
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def employees_per_department(request):
+    data = (
+        Department.objects.annotate(count=Count('employee'))
+        .values('name', 'count')
+    )
+    chart_data = {
+        "labels": [d["name"] for d in data],
+        "datasets": [{
+            "label": "Employees",
+            "data": [d["count"] for d in data],
+            "backgroundColor": "#36A2EB",
+        }]
+    }
+    return Response(chart_data)
+
+
+from django.db.models import Avg
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def avg_performance_by_department(request):
+    data = (
+        Department.objects
+        .annotate(avg_rating=Avg('employee__performance__rating'))
+        .values('name', 'avg_rating')
+    )
+    chart_data = {
+        "labels": [d["name"] for d in data],
+        "datasets": [{
+            "label": "Avg Rating",
+            "data": [round(d["avg_rating"] or 0, 2) for d in data],
+            "backgroundColor": "#FF9F40",
+        }]
+    }
+    return Response(chart_data)
 
 

@@ -1,47 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Attendance Summary</title>
+    <meta charset="UTF-8">
+    <title>Employee Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        canvas {
+            max-width: 100%;
+            height: 300px !important;
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+    </style>
 </head>
-
-<style>
-  body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
-    h2 {
-        text-align: center;
-    }
-    .attendanceChart {
-        display: block;
-        margin: 0 auto;
-        max-width: 600px;
-        height: 400px;
-    }
-
-
-
-</style>
-  
 <body>
-    <h2>Attendance Summary This Month</h2>
-    <canvas class="attendanceChart" id="attendanceChart" width="400" height="200"></canvas>
+    <h1>📊 Employee Dashboard</h1>
+
+    <div class="dashboard">
+        <div class="card">
+            <h3>1. Attendance Summary (This Month)</h3>
+            <canvas id="attendanceChart"></canvas>
+        </div>
+
+        <div class="card">
+            <h3>2. Employees per Department</h3>
+            <canvas id="empDeptChart"></canvas>
+        </div>
+
+        <div class="card">
+            <h3>3. Average Performance Rating by Department</h3>
+            <canvas id="avgPerfChart"></canvas>
+        </div>
+
+        
+    </div>
 
     <script>
-    fetch('http://127.0.0.1:8000/api/charts/attendance-summary/', {
-        headers: {
-            'Authorization': 'token 0c9b0355101cfc1c8b518e1434f99c38a2948839'
+        const token = 'Token 0c9b0355101cfc1c8b518e1434f99c38a2948839'; // 🔁 Replace with actual token
+
+        function loadChart(url, canvasId, type = 'bar') {
+            fetch(url, {
+                headers: { 'Authorization': token }
+            })
+            .then(res => res.json())
+            .then(data => {
+                new Chart(document.getElementById(canvasId).getContext('2d'), {
+                    type: type,
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            });
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const ctx = document.getElementById('attendanceChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: data,
-        });
-    });
+
+        loadChart('/api/charts/attendance-summary/', 'attendanceChart', 'doughnut');
+        loadChart('/api/charts/employees-per-department/', 'empDeptChart', 'bar');
+        loadChart('/api/charts/avg-performance-by-department/', 'avgPerfChart', 'bar');
     </script>
 </body>
 </html>
