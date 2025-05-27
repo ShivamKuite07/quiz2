@@ -2,6 +2,8 @@
 
 # Employee Management API - Quiz2 Project
 
+## Note: See demo_video for a basic walkthrough of the project.
+
 ## Overview
 
 This Django project provides an employee management system with REST APIs for employee data, attendance tracking, and performance records. It includes:
@@ -52,7 +54,7 @@ quiz2/
 ### 1. Clone Repository
 
 ```bash
-git clone <your_repo_url>
+git clone https://github.com/ShivamKuite07/quiz2/
 cd quiz2
 ```
 
