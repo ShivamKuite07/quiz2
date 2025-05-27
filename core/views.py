@@ -10,7 +10,8 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 class EmployeeViewSet(viewsets.ModelViewSet):
-    queryset = Employee.objects.all()
+    # queryset = Employee.objects.all()
+    queryset = Employee.objects.all().order_by('id')  # or any consistent field
     serializer_class = EmployeeSerializer
     permission_classes = [IsAuthenticated]
 
