@@ -15,6 +15,12 @@ This Django project provides an employee management system with REST APIs for em
 
 ---
 
+<div align="center">  
+<img src="charts.png" alt="charts" width="75%">  
+</div>  
+
+---
+
 ## Project Structure
 
 ```
